@@ -14,11 +14,19 @@ from .token import user_tokenizer_generate
 
 def register(request):
 
+    # - Creating an empty user form for further actions
+
     form = CreateUserForm()
 
     if request.method == "POST":
 
+        # - Creating a form instance but this time we are passing data to it (username,
+        #  password, email)
+
         form = CreateUserForm(request.POST)
+
+        # - This checks if the form data is valid based on the rules defined in CreateUserForm class
+        # - and then saves it to db.
 
         if form.is_valid():
 
@@ -28,11 +36,16 @@ def register(request):
 
             user.save()
 
-            # Email verification setup (template)
+            # - Email verification setup (template)
+
+            # - This retrives a current domain name of the site based on request object
 
             current_site = get_current_site(request)
 
             subject = "Account verification email"
+
+            # - Creates a string from URL with the data: user object, current domain, 
+            # - user's primary key and generates a unique token for him
 
             message = render_to_string("account/registration/email-verification.html",{
 
@@ -42,6 +55,8 @@ def register(request):
                     "token": user_tokenizer_generate.make_token(user),
 
             })
+
+            # - Sends an email to user for further confirmation
 
             user.email_user(subject=subject, message=message)
 
@@ -59,12 +74,19 @@ def register(request):
 
 
 def email_verification(request, uidb64, token):
+
+    # - Decoding user id 
     
     unique_id = force_str(urlsafe_base64_decode(uidb64))
+
+    # - Getting user by his id 
 
     user = User.objects.get(pk=unique_id)
 
     # Success
+
+    # - At first if statement checks that the user exists then 
+    # - compares current token with the one that we generated earlier
 
     if user and user_tokenizer_generate.check_token(user, token):
 
@@ -129,6 +151,8 @@ def user_logout(request):
 
     return redirect("store")
 
+
+# - Decorator ensures that the user is logged in before processing to dashboard page
 
 @login_required(login_url="my-login")
 def dashboard(request):

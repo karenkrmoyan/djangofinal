@@ -7,6 +7,9 @@ from django.forms.widgets import PasswordInput, TextInput
 
 class CreateUserForm(UserCreationForm):
 
+    # - Meta class tells django that userform linked with User model and 
+    # - initializes the fields that we need
+
     class Meta:
 
         model = User
@@ -18,6 +21,8 @@ class CreateUserForm(UserCreationForm):
 
         self.fields["email"].required = True
 
+
+    # - Cleaning and validating email
 
     def clean_email(self):
 
