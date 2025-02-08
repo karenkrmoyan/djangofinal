@@ -1,5 +1,7 @@
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
+from django.utils.text import slugify
 
 
 class Category(models.Model):
@@ -23,7 +25,8 @@ class Category(models.Model):
 
 class Product(models.Model):
     
-    category = models.ForeignKey(Category, related_name="product", on_delete=models.CASCADE, null=True  )
+    category = models.ForeignKey(Category, related_name="product", on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(max_length=250)
     brand = models.CharField(max_length=250, default="un-branded")
     description = models.TextField(blank=True)
@@ -42,3 +45,10 @@ class Product(models.Model):
     def get_absolute_url(self):
         
         return reverse("product-info", args=[self.slug])
+    
+    # - Saving the slug field when user is posting a product
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs) 

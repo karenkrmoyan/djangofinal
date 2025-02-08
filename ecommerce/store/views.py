@@ -1,6 +1,9 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 
 from .models import Category, Product
+from .forms import ProductForm
 
 def store(request):
 
@@ -40,4 +43,41 @@ def product_info(request, product_slug):
 
     return render(request, "store/product-info.html", context=context)
 
+
+
+# - Getting products posted by current user
+
+@login_required
+def my_products(request):
+
+    user = request.user
+
+    products = Product.objects.filter(user=user)
+
+    return render(request, "store/my-products.html", {"products": products})
+
+
+
+@login_required
+def add_product(request):
+
+    if request.method == "POST":
+
+        form = ProductForm(request.POST, request.FILES)
+
+        if form.is_valid():
+
+            product = form.save(commit=False)
+
+            product.user = request.user
+
+            product.save()
+
+            return redirect("my-products")
+        
+    else:
+
+        form = ProductForm()
+        
+    return render(request, "store/add-product.html", {"form": form})
 

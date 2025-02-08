@@ -137,7 +137,7 @@ def my_login(request):
 
                 auth.login(request, user)
 
-                return redirect("dashboard")
+                return redirect("/")
             
     context = {"form": form}
 

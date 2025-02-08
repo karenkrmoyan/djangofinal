@@ -69,11 +69,11 @@
 
         <span class="navbar-toggler-icon"></span>
 
-    </button>
+        </button>
 
     
         <div class="collapse navbar-collapse" id="navbarCollapse">
-                
+            
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
 
                 <li class="nav-item dropdown">
@@ -115,23 +115,38 @@
         <div class="collapse navbar-collapse text-center" id="navbarNavDropdown">
             
             <ul class="navbar-nav ms-auto">
-
-
-                <li class="nav-item">
+    
+                {% if request.user.is_authenticated %}
+                    
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Account
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{% url 'add-product' %}"> Add Product </a></li>
+                            <li><a class="dropdown-item" href="{% url 'my-products' %}"> My Products </a></li>
+                            <li><a class="dropdown-item" href=""> Settings </a></li>
+                            <li><a class="dropdown-item" href="{% url 'user-logout' %}" style="color: red;"> Logout </a></li>
+                        </ul>
+                    </li>
+                
+                {% else %}
             
-                    <a class="btn btn-alert navbar-btn text-white" type="button"  href="{% url 'register' %}"> Register </a>
+                    <li class="nav-item">
+                        <a class="btn btn-alert navbar-btn text-white" type="button" href="{% url 'register' %}"> Register </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-alert navbar-btn text-white" type="button" href="{% url 'my-login' %}"> Login </a>
+                    </li>
+                {% endif %}
+            
+            </ul>
+            
+        </div>
 
-                </li>
 
-
-                <li class="nav-item">
-
-                    <a class="btn btn-alert navbar-btn text-white" type="button"  href="{% url 'my-login' %}"> Login </a>
-
-                </li>
-
-
-                &nbsp; &nbsp; &nbsp;
+        &nbsp; &nbsp;
 
 
                 <li class="nav-item">
@@ -174,6 +189,7 @@
 
 
     </nav>
+    
 
 
     <body>
