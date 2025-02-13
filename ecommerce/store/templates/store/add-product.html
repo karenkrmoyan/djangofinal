@@ -60,6 +60,15 @@
               {{ form.image|as_crispy_field }}
 
               <br>
+
+              <label>Additional Images:</label>
+                  {{ formset.management_form }}
+
+                  {% for image_form in formset %}
+                      {{ image_form.image|as_crispy_field }}
+                      <br>
+                  {% endfor %}
+              <br>
               <br>
 
             <button type="submit" class="btn btn-primary">Add Product</button>

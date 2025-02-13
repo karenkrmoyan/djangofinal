@@ -2,8 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
-from .models import Category, Product
-from .forms import ProductForm
+from .models import Category, Product, ProductImage
+from .forms import ProductForm, ProductImageFormSet
 
 def store(request):
 
@@ -65,7 +65,9 @@ def add_product(request):
 
         form = ProductForm(request.POST, request.FILES)
 
-        if form.is_valid():
+        formset = ProductImageFormSet(request.POST, request.FILES, queryset=ProductImage.objects.none())
+
+        if form.is_valid() and formset.is_valid():
 
             product = form.save(commit=False)
 
@@ -73,11 +75,21 @@ def add_product(request):
 
             product.save()
 
+
+            for image_form in formset:
+
+                if image_form.cleaned_data.get("image"):
+                    
+                    ProductImage.objects.create(product=product, image=image_form.cleaned_data['image'])
+
+
             return redirect("my-products")
         
     else:
 
         form = ProductForm()
+
+        formset = ProductImageFormSet(queryset=ProductImage.objects.none())
         
-    return render(request, "store/add-product.html", {"form": form})
+    return render(request, "store/add-product.html", {"form": form, "formset": formset})
 

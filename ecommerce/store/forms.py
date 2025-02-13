@@ -1,7 +1,7 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, modelformset_factory
 from django import forms
 
-from .models import Product
+from .models import Product, ProductImage
 
 
 class ProductForm(ModelForm):
@@ -17,3 +17,14 @@ class ProductForm(ModelForm):
             "description": forms.Textarea(attrs={"placeholder": "Enter product details", "rows": 3}),
         }
 
+
+
+class ProductImageForm(ModelForm):
+
+    class Meta:
+
+        model = ProductImage
+        fields = ["image"]
+
+
+ProductImageFormSet = modelformset_factory(ProductImage, form=ProductImageForm, extra=4)  # Adjust extra as needed

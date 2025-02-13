@@ -39,7 +39,15 @@
 
                             <div class="col-6"> Price </div>
 
-                            <div class="col-6 text-end"><span class="h4 fw-bold">$ {{ product.price }} </span></div>
+                            {% if request.user == product.user %}
+
+                                <div class="col-6 text-end"><span class="h4 fw-bold">$ {{ product.price }} </span></div>
+                            
+                            {% else %}
+                            
+                                <div class="col-6 text-end"><span class="h4 fw-bold" id="total-price">$ {{ product.price }} </span></div>
+
+                            {% endif %}
 
                         </div>
 
@@ -103,41 +111,45 @@
 
 <script>
 
-    $(document).on("click", "#add-button", function(e){
+$(document).ready(function () {
+        // Function to update total price dynamically
+        function updateTotalPrice() {
+            let quantity = $("#select option:selected").val();
+            let price = parseFloat("{{ product.price }}"); // Get product price from template
+            let total = quantity * price; 
+            $("#total-price").text("$ " + total.toFixed(2)); // Update price display
+        }
 
-        e.preventDefault();
-
-        $.ajax({
-
-            type: "POST",
-            url: "{% url 'cart-add' %}",
-            data: {
-                product_id: $("#add-button").val(),
-                product_quantity: $("#select option:selected").text(),
-                csrfmiddlewaretoken: "{{csrf_token}}",
-                action: "post"
-            },
-
-            success: function(json){
-
-                //console.log(json)
-
-                document.getElementById("cart-qty").textContent = json.qty
-
-            },
-
-            error: function(xhr, errmsg, err){
-
-
-            }
-        
+        // Event listener for quantity change
+        $("#select").on("change", function () {
+            updateTotalPrice();
         });
 
+        // Event listener for Add to Cart button
+        $(document).on("click", "#add-button", function (e) {
+            e.preventDefault();
 
-    })
+            $.ajax({
+                type: "POST",
+                url: "{% url 'cart-add' %}",
+                data: {
+                    product_id: $("#add-button").val(),
+                    product_quantity: $("#select option:selected").val(),
+                    csrfmiddlewaretoken: "{{ csrf_token }}",
+                    action: "post"
+                },
+                success: function (json) {
+                    document.getElementById("cart-qty").textContent = json.qty;
+                },
+                error: function (xhr, errmsg, err) {
+                    console.log(errmsg);
+                }
+            });
+        });
 
-
-
+        // Initialize total price on page load
+        updateTotalPrice();
+    });
 
 </script>
 

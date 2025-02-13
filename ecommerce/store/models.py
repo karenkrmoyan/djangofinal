@@ -51,4 +51,15 @@ class Product(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
-        super().save(*args, **kwargs) 
+        super().save(*args, **kwargs)
+
+
+
+class ProductImage(models.Model):
+
+    product = models.ForeignKey(Product, related_name="images", on_delete=models.CASCADE, null=True, blank=True)
+    image = models.ImageField(upload_to="images/")
+
+
+    def __str__(self):
+        return f"Image for {self.product.title}"
