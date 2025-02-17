@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
-from .models import Category, Product, ProductImage
+from .models import Category, Product, ProductImage, ProductFeedback
 from .forms import ProductForm, ProductImageFormSet
 
 def store(request):
@@ -34,14 +34,35 @@ def list_category(request, category_slug=None):
     
 
 
-
+@login_required
 def product_info(request, product_slug):
     
     product = get_object_or_404(Product, slug=product_slug)
 
-    context = {"product": product}
+    feedbacks = ProductFeedback.objects.filter(product=product)
 
-    return render(request, "store/product-info.html", context=context)
+    avg_rating = ProductFeedback.get_average_rating
+
+    if request.method == "POST":
+        rating = int(request.POST.get('rating', 0))
+        comment = request.POST.get('comment', '').strip()
+
+        ProductFeedback.objects.create(
+            product=product,
+            user=request.user,
+            rating=rating,
+            comment=comment
+        )
+        
+        return redirect('product-info', product_slug=product.slug)
+
+    context = {
+        "product": product,
+        "feedbacks": feedbacks,
+        "avg_rating": avg_rating,
+    }
+
+    return render(request, "store/product-info.html", context)
 
 
 
