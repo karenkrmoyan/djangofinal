@@ -1,5 +1,6 @@
 {% load static %}
 
+
 <!DOCTYPE html>
 
 <html>
@@ -10,6 +11,7 @@
         <meta charset="utf-8"/>
 
         <meta name="viewport" content="width=device-width, initial-scale=1">
+
 
 
 	  <title> My Store </title>
@@ -39,7 +41,12 @@
 
 	 <!-- Bootstrap Max CDN --> 
 
-	  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+        
+
+        <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+
+        <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
 
 
 
@@ -203,6 +210,8 @@
 
             
         {% endblock %}
+
+        {% block javascript %}{% endblock %}
     
         
 

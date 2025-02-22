@@ -28,8 +28,10 @@ INSTALLED_APPS = [
     'store',
     'cart',
     'account',
+    'chat',
     'mathfilters',
     'crispy_forms',
+    'django_htmx',
 ]
 
 
@@ -44,6 +46,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_htmx.middleware.HtmxMiddleware',
 ]
 
 ROOT_URLCONF = 'ecommerce.urls'

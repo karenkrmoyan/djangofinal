@@ -1,0 +1,57 @@
+{% extends 'store/base.html' %}
+
+{% load django_htmx %}
+
+{% block content %}
+
+<div class="container my-4">
+    <div id="chat_window" class="bg-dark text-white rounded shadow-lg p-3" style="max-width: 700px; width: 100%; margin: 0 auto;">
+        <!-- Online Count Banner -->
+        <div class="d-flex justify-content-center text-success bg-dark p-2 sticky-top">
+            <span id="online-count" class="pr-1">3</span> online
+        </div>
+        
+        <!-- Chat Messages Container -->
+        <div id="chat_container" class="overflow-auto" style="max-height: 30rem;">
+            <ul id="chat_messages" class="d-flex flex-column justify-content-end gap-2 p-4">
+                {% for message in chat_messages reversed %}
+                    {% include 'chat/chat_message.html' %}
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <!-- Message Input Section -->
+        <div class="sticky-bottom p-2 bg-dark">
+            <div class="d-flex align-items-center rounded-xl px-2 py-2">
+                <form id="chat_message_form" class="w-100" 
+                      hx-post="{% url 'home' %}"
+                      hx-target="#chat_messages"
+                      hx-swap="beforeend"
+                      hx-on::after-request="this.reset()"
+                      method="post">
+                    {% csrf_token %}
+                    {{ form }}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+
+<script>
+
+    function scrollToBottom() {
+
+        const container = document.getElementById('chat_container');
+        container.scrollTop = container.scrollHeight;
+
+    }
+
+    scrollToBottom()
+
+</script>
+
+{% endblock %}
