@@ -1,102 +1,55 @@
-
 {% extends "./base.html" %}
-
 {% load static %}
-
 
 {% block content %}
 
-
-    <!-- Introduction section -->
-  
-    <section class="py-4 text-center container">
-
-        <div class="row py-lg-5">
-        
-            <div class="col-lg-6 col-md-8 mx-auto">
-                
-
-                <h4> Welcome to My Store ! </h4>
-
-
-                <br>
-                
-
-                <p class="lead text-muted">
-
-                Browse our extensive collection.
-
+    <!-- Introduction Section -->
+    <section class="py-5 text-center container">
+        <div class="row py-5">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="fw-bold text-primary">Welcome to My Store!</h2>
+                <p class="lead text-muted mt-3">
+                    Discover our carefully curated selection of high-quality products.
                 </p>
-
-
-                <br>
-        
-                <a href="{% url 'register' %}" class="btn btn-primary my-2"> Create an account </a>
-                 
-                
             </div>
-        
         </div>
-
-    
     </section>
 
-    <!-- All products section -->
-      
+    <!-- Products Section -->
     <div class="album py-5 bg-light">
-        
         <div class="container">
-    
-          <div class="pb-3 h5"> All products </div>
+            <h4 class="pb-3 text-dark fw-semibold">All Products</h4>
+            <hr class="mb-4">
 
-
-          <hr>
-
-          <br>
-          
-
-          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-3">
-    
-            {% for product in all_products %} 
-    
-              <div class="col">
-                
-                <div class="card shadow-sm">
-                  
-                  <img class="img-fluid" alt="Responsive image" src="{{product.image.url}}">
-                  
-                  <div class="card-body">
-                    
-                    <p class="card-text">
-                    
-                      <a class="text-info text-decoration-none" href="{{ product.get_absolute_url }}">{{product.title | capfirst}}</a>
-                    
-                    </p>
-                    
-                    <div class="d-flex justify-content-between align-items-center">
-                    
-                      <h5> $ {{product.price}} </h5>
-                    
-                    </div>
-                  
-                  </div>
-                
+            {% if all_products %}
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 row-cols-lg-5 g-4">
+                    {% for product in all_products %}
+                        <div class="col">
+                            <div class="card shadow-sm border-0 h-100">
+                                <a href="{{ product.get_absolute_url }}" class="d-block">
+                                    <img class="card-img-top img-fluid rounded" 
+                                         src="{{ product.image.url }}" 
+                                         alt="{{ product.title }}" 
+                                         style="height: 200px; object-fit: cover;">
+                                </a>
+                                <div class="card-body text-center">
+                                    <h6 class="fw-bold">
+                                        <a class="text-dark text-decoration-none" href="{{ product.get_absolute_url }}">
+                                            {{ product.title|capfirst }}
+                                        </a>
+                                    </h6>
+                                    <p class="text-success fw-semibold mb-0">$ {{ product.price }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
-              
-              </div>
-              
-            {% endfor %}
-    
-          </div>
+            {% else %}
+                <div class="text-center">
+                    <p class="lead text-muted">No products available at the moment.</p>
+                </div>
+            {% endif %}
         </div>
-      </div>
-
-
+    </div>
 
 {% endblock %}
-
-
-
-
-
-

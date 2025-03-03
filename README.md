@@ -23,7 +23,9 @@ Models:
                4. Descripiton (not required)
                5. Slugfield
                6. Price 
-               7. Image (automaticaly uploading to static/media folder)  
+               7. Image (automaticaly uploading to static/media folder) 
+               8. User field which is a foreignkey for django's builtin User model 
 
     Each model has its absolute URL functionality          
+
 

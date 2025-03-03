@@ -46,6 +46,10 @@
 
         <script src="https://unpkg.com/htmx.org@1.9.10"></script>
 
+
+        <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
+
+
         <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
 
 
@@ -118,37 +122,41 @@
 
         </div>
 
-
         <div class="collapse navbar-collapse text-center" id="navbarNavDropdown">
-            
             <ul class="navbar-nav ms-auto">
-    
                 {% if request.user.is_authenticated %}
-                    
+                    <!-- Chat Dropdown -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button"
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="chatDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Chat
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="chatDropdown">
+                            <li><a class="dropdown-item" href="{% url 'public-chat' %}">Public Chat</a></li>
+                        </ul>
+                    </li>
+        
+                    <!-- Account Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="accountDropdown" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
                             Account
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="{% url 'add-product' %}"> Add Product </a></li>
-                            <li><a class="dropdown-item" href="{% url 'my-products' %}"> My Products </a></li>
-                            <li><a class="dropdown-item" href=""> Settings </a></li>
-                            <li><a class="dropdown-item" href="{% url 'user-logout' %}" style="color: red;"> Logout </a></li>
+                        <ul class="dropdown-menu" aria-labelledby="accountDropdown">
+                            <li><a class="dropdown-item" href="{% url 'add-product' %}">Add Product</a></li>
+                            <li><a class="dropdown-item" href="{% url 'my-products' %}">My Products</a></li>
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                            <li><a class="dropdown-item text-danger" href="{% url 'user-logout' %}">Logout</a></li>
                         </ul>
                     </li>
-                
                 {% else %}
-            
                     <li class="nav-item">
-                        <a class="btn btn-alert navbar-btn text-white" type="button" href="{% url 'my-login' %}"> Login </a>
+                        <a class="btn btn-alert navbar-btn text-white" type="button" href="{% url 'my-login' %}">Login</a>
                     </li>
-                    
                 {% endif %}
-            
             </ul>
-            
         </div>
+        
 
 
         &nbsp; &nbsp;

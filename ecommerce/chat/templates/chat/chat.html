@@ -8,7 +8,12 @@
     <div id="chat_window" class="bg-dark text-white rounded shadow-lg p-3" style="max-width: 700px; width: 100%; margin: 0 auto;">
         <!-- Online Count Banner -->
         <div class="d-flex justify-content-center text-success bg-dark p-2 sticky-top">
-            <span id="online-count" class="pr-1">3</span> online
+            
+            {% if other_user %}
+            {% else %}
+            <div id="online-icon"></div>
+            <span id="online-count" class="pr-1"></span> online
+            {% endif %}
         </div>
         
         <!-- Chat Messages Container -->
@@ -24,11 +29,10 @@
         <div class="sticky-bottom p-2 bg-dark">
             <div class="d-flex align-items-center rounded-xl px-2 py-2">
                 <form id="chat_message_form" class="w-100" 
-                      hx-post="{% url 'home' %}"
-                      hx-target="#chat_messages"
-                      hx-swap="beforeend"
-                      hx-on::after-request="this.reset()"
-                      method="post">
+                      hx-ext="ws"
+                      ws-connect="/ws/chatroom/{{ chatroom_name }}"
+                      ws-send="submit"
+                      _ = "on htmx:wsAfterSend reset() me">
                     {% csrf_token %}
                     {{ form }}
                 </form>
